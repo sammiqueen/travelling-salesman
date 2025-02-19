@@ -14,7 +14,8 @@ fn cities_spawn() -> Array::<i32, Ix2> {
     return cities_distances
 }
 
-/*fn naive(cities_distances : Array(10, 10)) {
+/*
+fn naive(cities_distances : Array(10, 10)) {
     
 }
 
@@ -24,4 +25,5 @@ fn nearest_neighbour(cities_distances : Array(10, 10)) {
 
 fn christofide_serdyukov(cities_distances : Array(10, 10)) {
 
-}*/
+}
+*/

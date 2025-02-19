@@ -1,27 +1,27 @@
+use ndarray::Array;
+use ndarray::Ix2;
+use ndarray_rand::RandomExt;
+use ndarray_rand::rand_distr::Uniform;
+
 fn main() {
-    println!("Hello, world!");
-
-    let string = "Hello";
-    println!("{}", string);
+    let _cities_distances: Array::<i32, Ix2> = cities_spawn();
 }
 
-fn cities_spawn() {
+fn cities_spawn() -> Array::<i32, Ix2> {
+    let cities_distances = Array::<i32, Ix2>::random((10, 10), Uniform::new(1, 10));
+    println!("{}", cities_distances);
+
+    return cities_distances
+}
+
+/*fn naive(cities_distances : Array(10, 10)) {
     
-
-    return cities;
 }
 
-fn naive(cities : struct) {
-    
-    return solution;
+fn nearest_neighbour(cities_distances : Array(10, 10)) {
+
 }
 
-fn nearest_neighbour(cities : struct) {
+fn christofide_serdyukov(cities_distances : Array(10, 10)) {
 
-    return solution;
-}
-
-fn christofide_serdyukov(cities : struct) {
-
-    return solution;
-}
+}*/

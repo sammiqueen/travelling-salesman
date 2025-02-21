@@ -1,5 +1,4 @@
-use std::rand;
-use std::rand::Rng;
+use rand::prelude::*;
 
 use ndarray::Array;
 use ndarray::Ix2;
@@ -25,15 +24,10 @@ fn cities_spawn() -> Array::<i32, Ix2> {
         position_y: i32,
     }
 
-    let mut rng = rand::task.rng();
-
     let cities : [City; 10] = {
-        let mut temp : [City; 10];
-        for i in 0..10 {
-            temp[i] = City {
-                position_x: rng.random(1,10),
-                position_y: rng.random(1,10),
-            };
+        let mut temp = [0; 5]; // Temporary mutable array
+        for (i, City) in temp.iter_mut().enumerate() {
+            *item = (i as i32) * 2; // Example: Initialize with even numbers
         }
 
         temp

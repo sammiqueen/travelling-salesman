@@ -1,4 +1,5 @@
-use rand::Rng;
+use std::rand;
+use std::rand::Rng;
 
 use ndarray::Array;
 use ndarray::Ix2;
@@ -18,23 +19,27 @@ fn main() {
 fn cities_spawn() -> Array::<i32, Ix2> {
     let cities_distances = Array::<i32, Ix2>::random((10, 10), Uniform::new(1, 10));
     
+    #[derive(Debug)]
     struct City {
         position_x: i32,
         position_y: i32,
     }
 
-    let rng = rand::rng();
+    let mut rng = rand::task.rng();
 
-    let cities : Vec<City> = Vec::new();
-
-    for i in 0..10 {
-        cities.push(City {
-            position_x: rng.random(),
-            position_y: rng.random(),
+    let cities : [City; 10] = {
+        let mut temp : [City; 10];
+        for i in 0..10 {
+            temp[i] = City {
+                position_x: rng.random(1,10),
+                position_y: rng.random(1,10),
+            };
         }
-    );
-        println!("{:?}", cities[i]);mu
-    }
+
+        temp
+    };
+
+    println!("{:?}", cities);
 
     //println!("{}", cities_distances);
 

@@ -1,4 +1,4 @@
-use rand::prelude::*;
+use rand::Rng;
 
 use ndarray::Array;
 use ndarray::Ix2;
@@ -10,7 +10,7 @@ fn main() {
 
     naive(&cities_distances);
 
-    repetitive_nearest_neighbour(&cities_distances);
+    //repetitive_nearest_neighbour(&cities_distances);
 
     //christofide_serdyukov(&cities_distances);
 }
@@ -24,13 +24,41 @@ fn cities_spawn() -> Array::<i32, Ix2> {
         position_y: i32,
     }
 
+    let mut rng = rand::thread_rng();
+
     let cities : [City; 10] = {
-        let mut temp = [0; 5]; // Temporary mutable array
-        for (i, City) in temp.iter_mut().enumerate() {
-            *item = (i as i32) * 2; // Example: Initialize with even numbers
+        let mut temp = [City {
+            position_x: 0,
+            position_y: 0
+        }; 10];
+
+        for i in 0..10 {
+
+            let is_duplicate = {
+                for y in 0..10 {
+                    if temp[i] = temp[y] || temp[i] == (City {
+                        position_x: 0,
+                        position_y:0
+                    }) {
+                        true
+                    }
+                    else {
+                        false
+                    }
+                }
+            }
+            
+            if !is_duplicate {
+                temp[i] = City {
+                    position_x: rng.gen_range(1..100),
+                    position_y: rng.gen_range(1..100)
+                };
+            }
+            else {
+                temp
+            }
         }
 
-        temp
     };
 
     println!("{:?}", cities);
@@ -46,7 +74,7 @@ fn naive(cities_distances : &Array::<i32, Ix2>) {
     println!("Hello from naive solution");
 }
 
-fn repetitive_nearest_neighbour(cities_distances : &Array::<i32, Ix2>) {
+/*fn repetitive_nearest_neighbour(cities_distances : &Array::<i32, Ix2>) {
     let mut shortest_distance : i32 = 10;
 
     for city in cities_distances {
@@ -60,7 +88,7 @@ fn repetitive_nearest_neighbour(cities_distances : &Array::<i32, Ix2>) {
         }
     }
     
-}
+}*/
 
 /*fn christofide_serdyukov(cities_distances : &Array::<i32, Ix2>) {
 

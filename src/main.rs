@@ -15,6 +15,8 @@ struct City {
 fn main() {
     let cities_distances: Array::<f64, Ix2> = cities_spawn();
 
+    println!("Distances included:  \n{}", cities_distances);
+
     naive(&cities_distances);
 
     //repetitive_nearest_neighbour(&cities_distances);
@@ -70,7 +72,7 @@ fn cities_spawn() -> Array::<f64, Ix2> {
 
         temp
     };
-     
+
     cities_distances
 }
 
@@ -87,7 +89,7 @@ fn distance(city_a : City, city_b : City) -> f64 {
 fn naive(cities_distances : &Array::<f64, Ix2>) -> f64 {
     println!("Hello from naive solution");
 
-    let mut route_length : f64 = 0;
+    let mut route_length : f64 = 0.0;
 
     route_length
 }

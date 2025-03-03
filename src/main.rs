@@ -1,5 +1,7 @@
 use rand::Rng;
 
+use std::time::{Duration, Instant};
+
 use ndarray::Array;
 use ndarray::Ix2;
 
@@ -12,14 +14,27 @@ struct City {
     position_y: i32,
 }
 
+#[derive(Debug)]
+struct Path {
+    length: f64,
+    route: [char; 10]
+}
+
 fn main() {
+    let now = Instant::now();
     let cities_distances: Array::<f64, Ix2> = cities_spawn();
+    println!("Spawning 10 cities took {:?}", now.elapsed());
+println!("Distances included:  \n{}", cities_distances);
 
-    println!("Distances included:  \n{}", cities_distances);
+    let now = Instant::now();
+    let path_naive = naive(&cities_distances);
+    println!("Solving Naïve solution took {:?}", now.elapsed());
+    println!("Naïve solution: {:?}", path_naive);
 
-    naive(&cities_distances);
-
-    //repetitive_nearest_neighbour(&cities_distances);
+    let now = Instant::now();
+    let path_repetitive = repetitive_nearest_neighbour(&cities_distances);
+    println!("Solving RNN solution took {:?}", now.elapsed());
+    println!("RNN solution: {:?}", path_repetitive)
 
     //christofide_serdyukov(&cities_distances);
 }
@@ -59,8 +74,6 @@ fn cities_spawn() -> Array::<f64, Ix2> {
         temp
     };
 
-    println!("{:?}", cities);
-
     let cities_distances : Array::<f64, Ix2> = {
         let mut temp : Array::<f64, Ix2> = Array::<f64, Ix2>::zeros((10, 10));
 
@@ -86,29 +99,25 @@ fn distance(city_a : City, city_b : City) -> f64 {
 }
 
 
-fn naive(cities_distances : &Array::<f64, Ix2>) -> f64 {
+fn naive(cities_distances : &Array::<f64, Ix2>) -> Path {
     println!("Hello from naive solution");
 
-    let mut route_length : f64 = 0.0;
 
-    route_length
+
+    return Path {
+        length: 0.0,
+        route: ['x'; 10]
+    }
 }
 
-/*fn repetitive_nearest_neighbour(cities_distances : &Array::<f64, Ix2>) {
-    let mut shortest_distance : i32 = 10;
+fn repetitive_nearest_neighbour(cities_distances : &Array::<f64, Ix2>) -> Path {
+    println!("Hello from RNN solution");
 
-    for city in cities_distances {
-        println!("{:?} c", city);
-        
-        println!("{:?} s", shortest_distance);
-
-        if *city < shortest_distance {
-            println!("{} is shorter than {}", city, shortest_distance);
-            shortest_distance = *city;
-        }
+    return Path {
+        length: 0.0,
+        route: ['x'; 10]
     }
-    
-}*/
+}
 
 /*fn christofide_serdyukov(cities_distances : &Array::<f64, Ix2>) {
 

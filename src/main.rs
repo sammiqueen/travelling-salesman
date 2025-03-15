@@ -3,6 +3,7 @@ use rand::Rng;
 use std::time::{Duration, Instant};
 
 use ndarray::Array;
+use ndarray::len_of;
 use ndarray::Ix2;
 
 #[derive(Debug)]
@@ -77,8 +78,8 @@ fn cities_spawn() -> Array::<f64, Ix2> {
     let cities_distances : Array::<f64, Ix2> = {
         let mut temp : Array::<f64, Ix2> = Array::<f64, Ix2>::zeros((10, 10));
 
-        for i in 0..10 {
-            for y in 0..10 {
+        for i in len_of(temp, Axis(0)) {
+            for y in len_of(temp, Axis(1)) {
                 temp[[i, y]] = distance(cities[i], cities[y]);
             }
         }

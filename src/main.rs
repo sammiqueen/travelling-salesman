@@ -102,6 +102,15 @@ fn distance(city_a : City, city_b : City) -> f64 {
 fn naive(cities_distances : &Array::<f64, Ix2>) -> Path {
     println!("Hello from naive solution");
 
+    let mut current_shortest_path : f64;
+
+    let cities : [i32; 10] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    
+    let mut routes: Vec<Vec<i32>>   = vec![ vec![cities.clone()]; 10];
+
+
+    
+
 
 
     return Path {
@@ -110,7 +119,7 @@ fn naive(cities_distances : &Array::<f64, Ix2>) -> Path {
     }
 }
 
-fn repetitive_nearest_neighbour(cities_distances : &Array::<f64, Ix2>) -> Path {
+fn repetitive_nearest_neighbour (cities_distances : &Array::<f64, Ix2>) -> Path {
     println!("Hello from RNN solution");
 
     return Path {

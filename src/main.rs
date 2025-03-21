@@ -111,12 +111,11 @@ fn length_of_route(route: [i32; 10], cities_distances: &Array::<f64, Ix2>) -> f6
     path_length
 }
 
-
 fn naive(cities_distances : &Array::<f64, Ix2>) -> Path {
     println!("Hello from naive solution");
 
     let mut current_shortest_path: Path = Path {
-        length: 100000000000000000000.0,
+        length: f64::MAX,
         route: [-1; 10]
     };
 
@@ -124,13 +123,9 @@ fn naive(cities_distances : &Array::<f64, Ix2>) -> Path {
     
     let mut routes: [[i32;10];10] = [cities.clone(); 10];
 
-    let mut current_path: Path = Path {
-        length: 0.0,
-        //route: [-1; 10]
-        route: cities.clone()
-    };
+    let mut current_path: Path;
 
-    current_path.length = length_of_route(current_path.route, cities_distances);
+    current_path.length = length_of_route(current_path.route, &cities_distances);
 
     if current_path.length < current_shortest_path.length {
         current_shortest_path = current_path.clone();

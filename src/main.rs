@@ -1,9 +1,8 @@
 use rand::Rng;
 
-use std::time::{Duration, Instant};
+use std::time::Instant;
 
 use ndarray::Array;
-use ndarray::len_of;
 use ndarray::Ix2;
 
 #[derive(Debug)]
@@ -16,9 +15,10 @@ struct City {
 }
 
 #[derive(Debug)]
+#[derive(Clone)]
 struct Path {
     length: f64,
-    route: [char; 10]
+    route: [i32; 10]
 }
 
 fn main() {
@@ -44,17 +44,17 @@ fn cities_spawn() -> Array::<f64, Ix2> {
 
     let mut rng = rand::rng();
 
-    let cities : [City; 10] = {
+    let cities: [City; 10] = {
         let mut temp = [City {
             position_x: 0,
             position_y: 0
         }; 10];
 
-        for i in 0..10 {
+        for i in 0..temp.len() {
 
             let mut is_duplicate = false;
 
-            for y in 0..10 {
+            for y in 0..temp.len() {
                 match temp[i] {
                      val if val == temp[y] => is_duplicate = true,
                     City {
@@ -75,11 +75,11 @@ fn cities_spawn() -> Array::<f64, Ix2> {
         temp
     };
 
-    let cities_distances : Array::<f64, Ix2> = {
-        let mut temp : Array::<f64, Ix2> = Array::<f64, Ix2>::zeros((10, 10));
+    let cities_distances: Array::<f64, Ix2> = {
+        let mut temp: Array::<f64, Ix2> = Array::<f64, Ix2>::zeros((10, 10));
 
-        for i in len_of(temp, Axis(0)) {
-            for y in len_of(temp, Axis(1)) {
+        for i in 0..cities.len() {
+            for y in 0..cities.len() {
                 temp[[i, y]] = distance(cities[i], cities[y]);
             }
         }
@@ -90,42 +90,61 @@ fn cities_spawn() -> Array::<f64, Ix2> {
     cities_distances
 }
 
-fn distance(city_a : City, city_b : City) -> f64 {
-    let x_dif : f64 = (city_a.position_x - city_b.position_x).abs().into();
-    let y_dif : f64 = (city_a.position_y - city_b.position_y).abs().into();
+fn distance(city_a: City, city_b: City) -> f64 {
+    let x_dif: f64 = (city_a.position_x - city_b.position_x).abs().into();
+    let y_dif: f64 = (city_a.position_y - city_b.position_y).abs().into();
 
-    let distance : f64 = (x_dif + y_dif).sqrt();
+    let distance: f64 = (x_dif + y_dif).sqrt();
 
     distance
+}
+
+fn length_of_route(route: [i32; 10], cities_distances: &Array::<f64, Ix2>) -> f64 {
+    let path_length: f64 = {
+        let mut temp: f64 = 0.0;
+        for i in 0..route.len() - 1 {
+            temp = temp + cities_distances[[route[i] as usize, route[i + 1] as usize]];
+        }
+        temp
+    };
+
+    path_length
 }
 
 
 fn naive(cities_distances : &Array::<f64, Ix2>) -> Path {
     println!("Hello from naive solution");
 
-    let mut current_shortest_path : f64;
+    let mut current_shortest_path: Path = Path {
+        length: 100000000000000000000.0,
+        route: [-1; 10]
+    };
 
-    let cities : [i32; 10] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    let cities: [i32; 10] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     
-    let mut routes: Vec<Vec<i32>>   = vec![ vec![cities.clone()]; 10];
+    let mut routes: [[i32;10];10] = [cities.clone(); 10];
 
-
-    
-
-
-
-    return Path {
+    let mut current_path: Path = Path {
         length: 0.0,
-        route: ['x'; 10]
+        //route: [-1; 10]
+        route: cities.clone()
+    };
+
+    current_path.length = length_of_route(current_path.route, cities_distances);
+
+    if current_path.length < current_shortest_path.length {
+        current_shortest_path = current_path.clone();
     }
+    
+    current_shortest_path
 }
 
-fn repetitive_nearest_neighbour (cities_distances : &Array::<f64, Ix2>) -> Path {
+fn repetitive_nearest_neighbour (cities_distances: &Array::<f64, Ix2>) -> Path {
     println!("Hello from RNN solution");
 
     return Path {
         length: 0.0,
-        route: ['x'; 10]
+        route: [-1; 10]
     }
 }
 

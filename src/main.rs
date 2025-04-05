@@ -123,7 +123,10 @@ fn naive(cities_distances : &Array::<f64, Ix2>) -> Path {
     
     let mut routes: [[i32;10];10] = [cities.clone(); 10];
 
-    let mut current_path: Path;
+    let mut current_path: Path = Path {
+        length: f64::MAX,
+        route: [-1; 10]
+    };
 
     current_path.length = length_of_route(current_path.route, &cities_distances);
 

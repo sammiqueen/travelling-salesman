@@ -2,9 +2,6 @@ use rand::Rng;
 
 use std::time::Instant;
 
-use ndarray::Array;
-use ndarray::Ix2;
-
 #[derive(Debug)]
 #[derive(Copy)]
 #[derive(Clone)]
@@ -23,9 +20,9 @@ struct Path {
 
 fn main() {
     let now = Instant::now();
-    let cities_distances: Array::<f64, Ix2> = cities_spawn();
+    let cities_distances: [[f64; 10]; 10] = cities_spawn();
     println!("Spawning 10 cities took {:?}", now.elapsed());
-println!("Distances included:  \n{}", cities_distances);
+    println!("Distances included:  \n{:?}", cities_distances);
 
     let now = Instant::now();
     let path_naive = naive(&cities_distances);
@@ -35,12 +32,14 @@ println!("Distances included:  \n{}", cities_distances);
     let now = Instant::now();
     let path_repetitive = repetitive_nearest_neighbour(&cities_distances);
     println!("Solving RNN solution took {:?}", now.elapsed());
-    println!("RNN solution: {:?}", path_repetitive)
+    println!("RNN solution: {:?}", path_repetitive);
+
+    routefinder();
 
     //christofide_serdyukov(&cities_distances);
 }
 
-fn cities_spawn() -> Array::<f64, Ix2> {
+fn cities_spawn() -> [[f64; 10]; 10] {
 
     let mut rng = rand::rng();
 
@@ -75,12 +74,12 @@ fn cities_spawn() -> Array::<f64, Ix2> {
         temp
     };
 
-    let cities_distances: Array::<f64, Ix2> = {
-        let mut temp: Array::<f64, Ix2> = Array::<f64, Ix2>::zeros((10, 10));
+    let cities_distances: [[f64; 10]; 10] = {
+        let mut temp: [[f64; 10]; 10] = [[0.0; 10]; 10];
 
         for i in 0..cities.len() {
             for y in 0..cities.len() {
-                temp[[i, y]] = distance(cities[i], cities[y]);
+                temp[i][y] = distance(cities[i], cities[y]);
             }
         }
 
@@ -99,11 +98,11 @@ fn distance(city_a: City, city_b: City) -> f64 {
     distance
 }
 
-fn length_of_route(route: [i32; 10], cities_distances: &Array::<f64, Ix2>) -> f64 {
+fn length_of_route(route: [i32; 10], cities_distances: &[[f64; 10];10]) -> f64 {
     let path_length: f64 = {
         let mut temp: f64 = 0.0;
         for i in 0..route.len() - 1 {
-            temp = temp + cities_distances[[route[i] as usize, route[i + 1] as usize]];
+            temp = temp + cities_distances[i][i];
         }
         temp
     };
@@ -111,7 +110,7 @@ fn length_of_route(route: [i32; 10], cities_distances: &Array::<f64, Ix2>) -> f6
     path_length
 }
 
-fn naive(cities_distances : &Array::<f64, Ix2>) -> Path {
+fn naive(cities_distances : &[[f64; 10];10]) -> Path {
     println!("Hello from naive solution");
 
     let mut current_shortest_path: Path = Path {
@@ -137,7 +136,17 @@ fn naive(cities_distances : &Array::<f64, Ix2>) -> Path {
     current_shortest_path
 }
 
-fn repetitive_nearest_neighbour (cities_distances: &Array::<f64, Ix2>) -> Path {
+fn routefinder() {
+    let city_names: [i32; 10] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+    let mut possible_destinations = [city_names.clone(); 10];
+
+    for i in 0..city_names.len() {
+        
+    }
+}
+
+fn repetitive_nearest_neighbour (cities_distances: &[[f64; 10];10]) -> Path {
     println!("Hello from RNN solution");
 
     return Path {
@@ -146,6 +155,6 @@ fn repetitive_nearest_neighbour (cities_distances: &Array::<f64, Ix2>) -> Path {
     }
 }
 
-/*fn christofide_serdyukov(cities_distances : &Array::<f64, Ix2>) {
+/*fn christofide_serdyukov(cities_distances : &[[f64; 10];10]) {
 
 }*/

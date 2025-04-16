@@ -110,11 +110,7 @@ fn length_of_route(route: [i32; 10], cities_distances: &[[f64; 10];10]) -> f64 {
     path_length
 }
 
-<<<<<<< HEAD
-fn naive(cities_distances: &Array::<f64, Ix2>) -> Path {
-=======
 fn naive(cities_distances : &[[f64; 10];10]) -> Path {
->>>>>>> bb7acdfba88b83cf277f5f4f1a70e482d7c0aca2
     println!("Hello from naive solution");
 
     let mut current_shortest_path: Path = Path {

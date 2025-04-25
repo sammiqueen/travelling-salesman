@@ -110,7 +110,7 @@ fn length_of_route(route: [i32; 10], cities_distances: &[[f64; 10];10]) -> f64 {
     path_length
 }
 
-fn naive(cities_distances : &[[f64; 10];10]) -> Path {
+fn naive(cities_distances: &[[f64; 10];10]) -> Path {
     println!("Hello from naive solution");
 
     let mut current_shortest_path: Path = Path {
@@ -140,10 +140,11 @@ fn routefinder() {
     let city_names: [i32; 10] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     let mut possible_destinations = [city_names.clone(); 10];
+    
+    fn pick_route(current_level: usize, ) {
 
-    for i in 0..city_names.len() {
-        
     }
+
 }
 
 fn repetitive_nearest_neighbour (cities_distances: &[[f64; 10];10]) -> Path {

@@ -18,10 +18,12 @@ struct Path {
     route: [i32; 10]
 }
 
+const AMOUNT: i32 = 10;
+
 fn main() {
     let now = Instant::now();
-    let cities_distances: [[f64; 10]; 10] = cities_spawn();
-    println!("Spawning 10 cities took {:?}", now.elapsed());
+    let cities_distances: [[f64; AMOUNT as usize]; AMOUNT as usize] = cities_spawn();
+    println!("Spawning {} cities took {:?}", AMOUNT, now.elapsed());
     println!("Distances included:  \n{:?}", cities_distances);
 
     let now = Instant::now();
@@ -39,15 +41,15 @@ fn main() {
     //christofide_serdyukov(&cities_distances);
 }
 
-fn cities_spawn() -> [[f64; 10]; 10] {
+fn cities_spawn() -> [[f64; AMOUNT as usize]; AMOUNT as usize] {
 
     let mut rng = rand::rng();
 
-    let cities: [City; 10] = {
+    let cities: [City; AMOUNT as usize] = {
         let mut temp = [City {
             position_x: 0,
             position_y: 0
-        }; 10];
+        }; AMOUNT as usize];
 
         for i in 0..temp.len() {
 
@@ -66,16 +68,16 @@ fn cities_spawn() -> [[f64; 10]; 10] {
             
             if is_duplicate {
                 temp[i] = City {
-                    position_x: rng.random_range(1..100),
-                    position_y: rng.random_range(1..100)
+                    position_x: rng.random_range(1..i32::MAX),
+                    position_y: rng.random_range(1..i32::MAX)
                 };
             }
         }
         temp
     };
 
-    let cities_distances: [[f64; 10]; 10] = {
-        let mut temp: [[f64; 10]; 10] = [[0.0; 10]; 10];
+    let cities_distances: [[f64; AMOUNT as usize]; AMOUNT as usize] = {
+        let mut temp: [[f64; AMOUNT as usize]; AMOUNT as usize] = [[0.0; AMOUNT as usize]; AMOUNT as  usize];
 
         for i in 0..cities.len() {
             for y in 0..cities.len() {
@@ -98,7 +100,7 @@ fn distance(city_a: City, city_b: City) -> f64 {
     distance
 }
 
-fn length_of_route(route: [i32; 10], cities_distances: &[[f64; 10];10]) -> f64 {
+fn length_of_route(route: [i32; AMOUNT as usize], cities_distances: &[[f64; AMOUNT as usize]; AMOUNT as usize]) -> f64 {
     let path_length: f64 = {
         let mut temp: f64 = 0.0;
         for i in 0..route.len() - 1 {
@@ -110,7 +112,11 @@ fn length_of_route(route: [i32; 10], cities_distances: &[[f64; 10];10]) -> f64 {
     path_length
 }
 
+<<<<<<< HEAD
 fn naive(cities_distances: &[[f64; 10];10]) -> Path {
+=======
+fn naive(cities_distances : &[[f64; AMOUNT as usize]; AMOUNT as usize]) -> Path {
+>>>>>>> 0b1332d878d5dc7736dd34bfbe11b22753d79099
     println!("Hello from naive solution");
 
     let mut current_shortest_path: Path = Path {
@@ -120,7 +126,7 @@ fn naive(cities_distances: &[[f64; 10];10]) -> Path {
 
     let cities: [i32; 10] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     
-    let mut routes: [[i32;10];10] = [cities.clone(); 10];
+    let mut routes: [[i32; AMOUNT as usize]; AMOUNT as usize] = [cities.clone(); AMOUNT as usize];
 
     let mut current_path: Path = Path {
         length: f64::MAX,
@@ -137,14 +143,32 @@ fn naive(cities_distances: &[[f64; 10];10]) -> Path {
 }
 
 fn routefinder() {
-    let city_names: [i32; 10] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    let city_names: [i32; AMOUNT as usize] = {
+        let mut temp = [0; AMOUNT as usize];
+        for i in 0..AMOUNT {
+            temp[i as usize] = i;
+        }
+        temp
+    };
 
+<<<<<<< HEAD
     let mut possible_destinations = [city_names.clone(); 10];
     
     fn pick_route(current_level: usize, ) {
 
     }
 
+=======
+    let mut possible_destinations = [city_names.clone(); AMOUNT as usize];
+
+    let destinations_iter = {
+        let mut temp: [IntoIterator<i32>; AMOUNT as usize];
+        for i in 0..AMOUNT {
+            temp[i] = possible_destinations[i as usize].iter();
+        }
+        temp
+    };
+>>>>>>> 0b1332d878d5dc7736dd34bfbe11b22753d79099
 }
 
 fn repetitive_nearest_neighbour (cities_distances: &[[f64; 10];10]) -> Path {

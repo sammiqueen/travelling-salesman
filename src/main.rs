@@ -12,11 +12,10 @@ struct City {
 }
 
 #[derive(Debug)]
-#[derive(Copy)]
 #[derive(Clone)]
 #[derive(PartialEq)]
-struct ReturnObject {
-    possible_destinations: [[dyn IntoIterator([i32; AMOUNT as usize])]; AMOUNT as usize],
+struct TreeSpecifics {
+    possible_destinations: [Vec<i32>; AMOUNT as usize],
     current_level: usize,
 }
 
@@ -30,7 +29,7 @@ struct Path {
 const AMOUNT: i32 = 10;
 
 fn main() {
-    let now = Instant::now();
+    /*let now = Instant::now();
     let cities_distances: [[f64; AMOUNT as usize]; AMOUNT as usize] = cities_spawn();
     println!("Spawning {} cities took {:?}", AMOUNT, now.elapsed());
     println!("Distances included:  \n{:?}", cities_distances);
@@ -43,7 +42,7 @@ fn main() {
     let now = Instant::now();
     let path_repetitive = repetitive_nearest_neighbour(&cities_distances);
     println!("Solving RNN solution took {:?}", now.elapsed());
-    println!("RNN solution: {:?}", path_repetitive);
+    println!("RNN solution: {:?}", path_repetitive);*/
 
     routefinder();
 
@@ -162,13 +161,20 @@ fn routefinder() {
         temp
     };
 
-    let mut possible_destinations = [city_names.clone(); 10];
-
-    fn routepicker (return_object: ReturnObject) -> ReturnObject {
-        let send_object = return_object.clone();
-
-        send_object.possible_destinations[send_object.current_level].next()
-    }
+    let mut initial_tree: [[Option<i32>; AMOUNT as usize]; AMOUNT as usize] = {
+        let mut temp: [[Option<i32>; AMOUNT as usize]; AMOUNT as usize] = [[None; AMOUNT as usize]; AMOUNT as usize];
+        temp[0][0] = Some(0);
+        for i in 1..AMOUNT {
+            for y in i..AMOUNT {
+                temp[i as usize][y as usize] = Some(y)
+            }
+        }
+        temp
+    };
+    let mut mask: [[Option<i32>; AMOUNT as usize]; AMOUNT as usize] = {
+        let mut temp: [[Option<i32>; AMOUNT as usize]; AMOUNT as usize] = [[None; AMOUNT as usize]; AMOUNT as usize];
+        temp
+    };
 }
 
 fn repetitive_nearest_neighbour (cities_distances: &[[f64; 10];10]) -> Path {

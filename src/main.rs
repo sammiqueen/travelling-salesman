@@ -175,9 +175,6 @@ fn naive(cities_distances: &[[f64; AMOUNT as usize]; AMOUNT as usize]) -> Path {
             cities.push(city);
         }
     }
-
-    println!("{:?}", shortest_path);
-
     shortest_path
 }
 
@@ -197,12 +194,77 @@ fn repetitive_nearest_neighbour (cities_distances: &[[f64; AMOUNT as usize]; AMO
         cities_vec.push(cities[i]);
     }
 
-    
+    let mut shortest_path: Path = Path {
+        length: f64::MAX,
+        route: vec!()
+    };
 
-    return Path {
-        length: 0.0,
-        route: vec![]
+    for i in 0..AMOUNT {
+        let starting_city = i;
+        let mut cities_vec = {
+            let mut temp: Vec<i32> = vec!();
+            for y in 0..(cities.len()) as usize {
+                if cities[y] != i {
+                    temp.push(cities[y])
+                }
+            }
+            temp
+        };
+
+        let mut init_path: Path = Path {
+            length: f64::MAX,
+            route: vec!()
+        };
+
+        //find_solution(&mut cities_vec, starting_city, init_path.clone(), cities_distances, &mut init_path);
+        //println!("{:?}", init_path);
+        if init_path.length < shortest_path.length {
+            shortest_path = init_path.clone();
+        }
+
+        fn sammi_solution (cities: Vec<i32, current_city: i32, found_path: Path) {
+            
+        }
+
+        /*fn find_solution (cities: &mut Vec<i32>, current_city: i32, path: Path, cities_distances: &[[f64; AMOUNT as usize]; AMOUNT as usize], found_path: &mut Path) {
+            //println!("{:?} \n {:?}", shortest_path, path);
+            if cities.len() == 0 {
+                println!("{:?} \n {:?}", path.length, path.route);
+                *found_path = path;
+                return
+            }
+
+            println!("{:?}", cities);
+    
+            for i in 0..cities.len() {
+                let next_city = {
+                    let mut closest_city = 0;
+                    let mut shortest_distance: f64 = f64::MAX;
+                    for i in 0..cities.len() {
+                        if shortest_distance > distance_between_two_cities(current_city, cities[i], cities_distances) {
+                            shortest_distance = distance_between_two_cities(current_city, cities[i], cities_distances);
+                            closest_city = cities[i];
+                        }
+                    }
+                    closest_city
+                };
+    
+                let mut new_path: Path = Path {
+                    length: path.length + distance_between_two_cities(current_city, next_city, cities_distances),
+                    route: path.route.clone()
+                };
+                new_path.route.push(next_city);
+    
+                cities[i] = cities[cities.len() - 1];
+                cities.pop();
+    
+                find_solution (cities, next_city, new_path, cities_distances, found_path);
+            }
+        }*/
     }
+
+
+    shortest_path
 }
 
 /*fn christofide_serdyukov(cities_distances : &[[f64; 10];10]) {

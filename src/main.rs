@@ -26,7 +26,7 @@ struct Path {
     route: Vec<i32>
 }
 
-const AMOUNT: i32 = 10;
+const AMOUNT: i32 = 4;
 
 fn main() {
     let now = Instant::now();
@@ -139,16 +139,14 @@ fn naive(cities_distances: &[[f64; AMOUNT as usize]; AMOUNT as usize]) -> Path {
         route: vec!(0),
     };
 
-    let route_length = 0.0;
-
     let mut shortest_path = Path {
         length: f64::MAX,
         route: vec!()
     };
 
-    println!("{:?}", cities_vec);
+    //println!("{:?}", cities_vec);
 
-    find_solution(&mut cities_vec, starting_city, starting_path, cities_distances, &mut shortest_path);
+    find_solution(&mut cities_vec, starting_city, starting_path.clone(), cities_distances, &mut shortest_path);
 
     fn find_solution (cities: &mut Vec<i32>, current_city: i32, path: Path, cities_distances: &[[f64; AMOUNT as usize]; AMOUNT as usize], shortest_path: &mut Path) {
         //println!("{:?} \n {:?}", shortest_path, path);
@@ -163,12 +161,11 @@ fn naive(cities_distances: &[[f64; AMOUNT as usize]; AMOUNT as usize]) -> Path {
         for i in 0..cities.len() {
             let city = cities[i];
 
-            let mut current_route = path.route.clone();
-            current_route.push(city);
-            let new_path: Path = Path {
+            let mut new_path: Path = Path {
                 length: path.length + distance_between_two_cities(current_city, city, cities_distances),
-                route: current_route
+                route: path.route.clone()
             };
+            new_path.route.push(city);
 
             cities[i] = cities[cities.len() - 1];
             cities.pop();
@@ -184,8 +181,23 @@ fn naive(cities_distances: &[[f64; AMOUNT as usize]; AMOUNT as usize]) -> Path {
     shortest_path
 }
 
-fn repetitive_nearest_neighbour (cities_distances: &[[f64; 10];10]) -> Path {
+fn repetitive_nearest_neighbour (cities_distances: &[[f64; AMOUNT as usize]; AMOUNT as usize]) -> Path {
     println!("Hello from RNN solution");
+
+    let cities: [i32; AMOUNT as usize] = {
+        let mut temp = [0; AMOUNT as usize];
+        for i in 0..AMOUNT {
+            temp[i as usize] = i;
+        }
+        temp
+    };
+
+    let mut cities_vec: Vec<i32> = vec!();
+    for i in 0..cities.len() {
+        cities_vec.push(cities[i]);
+    }
+
+    
 
     return Path {
         length: 0.0,

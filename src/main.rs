@@ -32,17 +32,17 @@ fn main() {
     let now = Instant::now();
     let cities_distances: [[f64; AMOUNT as usize]; AMOUNT as usize] = cities_spawn();
     println!("Spawning {} cities took {:?}", AMOUNT, now.elapsed());
-    println!("Distances included:  \n{:?}", cities_distances);
+    println!("Distances included:  \n{:#?}", cities_distances);
 
     let now = Instant::now();
     let path_naive = naive(&cities_distances);
     println!("Solving Naïve solution took {:?}", now.elapsed());
-    println!("Naïve solution: {:?}", path_naive);
+    println!("Naïve solution: {:#?}", path_naive);
 
     let now = Instant::now();
     let path_repetitive = repetitive_nearest_neighbour(&cities_distances);
     println!("Solving RNN solution took {:?}", now.elapsed());
-    println!("RNN solution: {:?}", path_repetitive);
+    println!("RNN solution: {:#?}", path_repetitive);
 
     //christofide_serdyukov(&cities_distances);
 }
@@ -74,8 +74,8 @@ fn cities_spawn() -> [[f64; AMOUNT as usize]; AMOUNT as usize] {
             
             if is_duplicate {
                 temp[i] = City {
-                    position_x: rng.random_range(1..i32::MAX),
-                    position_y: rng.random_range(1..i32::MAX)
+                    position_x: rng.random_range(1..(AMOUNT * AMOUNT)),
+                    position_y: rng.random_range(1..(AMOUNT * AMOUNT))
                 };
             }
         }
@@ -222,8 +222,8 @@ fn repetitive_nearest_neighbour (cities_distances: &[[f64; AMOUNT as usize]; AMO
             shortest_path = init_path.clone();
         }
 
-        fn sammi_solution (cities: Vec<i32, current_city: i32, found_path: Path) {
-            
+        fn sammi_solution() {
+
         }
 
         /*fn find_solution (cities: &mut Vec<i32>, current_city: i32, path: Path, cities_distances: &[[f64; AMOUNT as usize]; AMOUNT as usize], found_path: &mut Path) {

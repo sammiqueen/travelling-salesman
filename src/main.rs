@@ -26,12 +26,51 @@ struct Path {
     route: Vec<i32>
 }
 
-const AMOUNT: i32 = 4;
+const AMOUNT: i32 = 5;
 
 fn main() {
     let now = Instant::now();
-    let cities_distances: [[f64; AMOUNT as usize]; AMOUNT as usize] = cities_spawn();
-    println!("Spawning {} cities took {:?}", AMOUNT, now.elapsed());
+    //let cities_distances: [[f64; AMOUNT as usize]; AMOUNT as usize] = cities_spawn();
+    //println!("Spawning {} cities took {:?}", AMOUNT, now.elapsed());
+    let cities_distances: [[f64; AMOUNT as usize]; AMOUNT as usize] = {
+        [
+            [
+                0.0,
+                5.385164807134504,
+                4.58257569495584,
+                3.605551275463989,
+                4.47213595499958,
+            ],
+            [
+                5.385164807134504,
+                0.0,
+                3.7416573867739413,
+                4.0,
+                3.0,
+            ],
+            [
+                4.58257569495584,
+                3.7416573867739413,
+                0.0,
+                2.8284271247461903,
+                3.605551275463989,
+            ],
+            [
+                3.605551275463989,
+                4.0,
+                2.8284271247461903,
+                0.0,
+                3.3166247903554,
+            ],
+            [
+                4.47213595499958,
+                3.0,
+                3.605551275463989,
+                3.3166247903554,
+                0.0,
+            ]
+        ]
+    };
     println!("Distances included:  \n{:#?}", cities_distances);
 
     let now = Instant::now();
@@ -148,24 +187,48 @@ fn naive(cities_distances: &[[f64; AMOUNT as usize]; AMOUNT as usize]) -> Path {
 
     find_solution(&mut cities_vec, starting_city, starting_path.clone(), cities_distances, &mut shortest_path);
 
-    fn find_solution (cities: &mut Vec<i32>, current_city: i32, path: Path, cities_distances: &[[f64; AMOUNT as usize]; AMOUNT as usize], shortest_path: &mut Path) {
+    fn find_solution (cities: &mut Vec<i32>, current_city: i32, mut path: Path, cities_distances: &[[f64; AMOUNT as usize]; AMOUNT as usize], shortest_path: &mut Path) {
         //println!("{:?} \n {:?}", shortest_path, path);
-        if cities.len() == 0 {
+        println!("{:?}", cities);
+        if cities.len() == 1 {
             //println!("{:?} \n {:?}", path.length, path.route);
+            //when cities.len() == 1, add last city to the route and calculate new length. ALSO add 0th city (start position) to end of route and calculate new length
+            path.length = path.length + distance_between_two_cities(path.route[path.route.len() - 1], cities[0], cities_distances);
+            path.route.push(cities[0]);
+            cities.pop();
+
+            path.length = path.length + distance_between_two_cities(path.route[path.route.len() - 1], 0, cities_distances);
+            path.route.push(0);
+            println!("{:#?}", path);
+
             if path.length < shortest_path.length {
                 *shortest_path = path.clone();
             }
+
+            path.route.pop();
+            path.length = path.length - distance_between_two_cities(path.route[path.route.len() - 1], 0, cities_distances);
+
+            cities.push(path.route[path.route.len() - 1]);
+            path.route.pop();
+            path.length = path.length - distance_between_two_cities(path.route[path.route.len() - 1], cities[0], cities_distances);
             return
         }
 
         for i in 0..cities.len() {
             let city = cities[i];
 
-            let mut new_path: Path = Path {
+            /*let mut new_path: Path = Path {
                 length: path.length + distance_between_two_cities(current_city, city, cities_distances),
                 route: path.route.clone()
             };
-            new_path.route.push(city);
+            new_path.route.push(city);*/
+
+            let mut current_route = path.route.clone();
+            current_route.push(city);
+            let new_path: Path = Path {
+                length: path.length + distance_between_two_cities(current_city, city, cities_distances),
+                route: current_route
+            };
 
             cities[i] = cities[cities.len() - 1];
             cities.pop();
@@ -189,11 +252,6 @@ fn repetitive_nearest_neighbour (cities_distances: &[[f64; AMOUNT as usize]; AMO
         temp
     };
 
-    let mut cities_vec: Vec<i32> = vec!();
-    for i in 0..cities.len() {
-        cities_vec.push(cities[i]);
-    }
-
     let mut shortest_path: Path = Path {
         length: f64::MAX,
         route: vec!()
@@ -205,65 +263,49 @@ fn repetitive_nearest_neighbour (cities_distances: &[[f64; AMOUNT as usize]; AMO
             let mut temp: Vec<i32> = vec!();
             for y in 0..(cities.len()) as usize {
                 if cities[y] != i {
-                    temp.push(cities[y])
+                    temp.push(cities[y].clone())
                 }
             }
             temp
         };
+        //println!("{:#?} \n {}", cities_vec, starting_city);
 
-        let mut init_path: Path = Path {
-            length: f64::MAX,
-            route: vec!()
+        let mut chosen_path: Path = Path {
+            length: 0.0,
+            route: vec!(starting_city)
         };
 
-        //find_solution(&mut cities_vec, starting_city, init_path.clone(), cities_distances, &mut init_path);
-        //println!("{:?}", init_path);
-        if init_path.length < shortest_path.length {
-            shortest_path = init_path.clone();
-        }
-
-        fn sammi_solution() {
-
-        }
-
-        /*fn find_solution (cities: &mut Vec<i32>, current_city: i32, path: Path, cities_distances: &[[f64; AMOUNT as usize]; AMOUNT as usize], found_path: &mut Path) {
-            //println!("{:?} \n {:?}", shortest_path, path);
-            if cities.len() == 0 {
-                println!("{:?} \n {:?}", path.length, path.route);
-                *found_path = path;
-                return
-            }
-
-            println!("{:?}", cities);
-    
-            for i in 0..cities.len() {
-                let next_city = {
-                    let mut closest_city = 0;
-                    let mut shortest_distance: f64 = f64::MAX;
-                    for i in 0..cities.len() {
-                        if shortest_distance > distance_between_two_cities(current_city, cities[i], cities_distances) {
-                            shortest_distance = distance_between_two_cities(current_city, cities[i], cities_distances);
-                            closest_city = cities[i];
-                        }
+        for _i in 0..AMOUNT - 1 {
+            chosen_path.route.push({
+                let mut shortest_distance = f64::MAX;
+                let mut closest_known_city = -1;
+                for y in 0..cities_vec.len() {
+                    if distance_between_two_cities(chosen_path.route[chosen_path.route.len() - 1], cities_vec[y], cities_distances) < shortest_distance {
+                        shortest_distance = distance_between_two_cities(chosen_path.route[chosen_path.route.len() - 1], cities_vec[y], cities_distances);
+                        closest_known_city = cities_vec[y]
                     }
-                    closest_city
-                };
-    
-                let mut new_path: Path = Path {
-                    length: path.length + distance_between_two_cities(current_city, next_city, cities_distances),
-                    route: path.route.clone()
-                };
-                new_path.route.push(next_city);
-    
-                cities[i] = cities[cities.len() - 1];
-                cities.pop();
-    
-                find_solution (cities, next_city, new_path, cities_distances, found_path);
-            }
-        }*/
+                }
+                for i in 0..cities_vec.len() {
+                    if cities_vec[i] == closest_known_city {
+                        cities_vec[i] = cities_vec[cities_vec.len() - 1];
+                        cities_vec.pop();
+                        break
+                    }
+                }
+
+            chosen_path.length = chosen_path.length + distance_between_two_cities(chosen_path.route[chosen_path.route.len() - 1], closest_known_city, cities_distances);
+            closest_known_city
+            });
+            //println!("{:#?}, \n {}", cities_vec, chosen_path.route[chosen_path.route.len() - 1]);
+        }
+        chosen_path.length = chosen_path.length + distance_between_two_cities(chosen_path.route[chosen_path.route.len() - 1], starting_city, cities_distances);
+        chosen_path.route.push(starting_city);
+        //println!("{:#?}", chosen_path);
+
+        if chosen_path.length < shortest_path.length {
+            shortest_path = chosen_path.clone();
+        }
     }
-
-
     shortest_path
 }
 

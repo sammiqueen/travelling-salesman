@@ -1,27 +1,35 @@
-use rand::Rng;
-
 use std::time::Instant;
 
-#[derive(Debug)]
-#[derive(Copy)]
-#[derive(Clone)]
-#[derive(PartialEq)]
-struct City {
+#[derive(Debug, Copy, Clone, PartialEq)]
+pub struct City {
     position_x: i32,
     position_y: i32,
 }
 
-#[derive(Debug)]
-#[derive(Clone)]
-struct Path {
-    length: f64,
-    route: Vec<i32>
+#[derive(Debug, Clone, PartialEq)]
+pub struct TreeSpecifics {
+    possible_destinations: [Vec<i32>; AMOUNT as usize],
+    current_level: usize,
 }
+
+#[derive(Debug, Clone)]
+pub struct Path {
+    length: f64,
+    route: Vec<i32>,
+}
+
+mod algorithms;
+mod city_gen;
 
 const AMOUNT: i32 = 10w;
 const ITERATIONS: i32 = 100;
 
 fn main() {
+    let now = Instant::now();
+    let cities_distances: [[f64; AMOUNT as usize]; AMOUNT as usize] =
+        city_gen::city_gen::cities_spawn();
+    //println!("Spawning {} cities took {:?}", AMOUNT, now.elapsed());
+    let cities_distances: [[f64; AMOUNT as usize]; AMOUNT as usize] = {
     let _now = Instant::now();
 
     let mut tot_naive_time: u128 = 0;
@@ -37,13 +45,7 @@ fn main() {
                 3.605551275463989,
                 4.47213595499958,
             ],
-            [
-                5.385164807134504,
-                0.0,
-                3.7416573867739413,
-                4.0,
-                3.0,
-            ],
+            [5.385164807134504, 0.0, 3.7416573867739413, 4.0, 3.0],
             [
                 4.58257569495584,
                 3.7416573867739413,
@@ -64,7 +66,7 @@ fn main() {
                 3.605551275463989,
                 3.3166247903554,
                 0.0,
-            ]
+            ],
         ]
     };*/
     
@@ -74,6 +76,10 @@ fn main() {
         //println!("Spawning {} cities took {:?}", AMOUNT, now.elapsed());
         //println!("Distances included:  \n{:#?}", cities_distances);
 
+    let now = Instant::now();
+    let path_naive = algorithms::algorithms::naive(&cities_distances);
+    println!("Solving Naïve solution took {:?}", now.elapsed());
+    println!("Naïve solution: {:#?}", path_naive);
         let now = Instant::now();
         let path_naive = naive(&cities_distances);
         let naive_time = now.elapsed().as_nanos();
@@ -81,6 +87,10 @@ fn main() {
         //println!("Solving Naïve solution took {:?}", naive_time);
         //println!("Naïve solution: {:#?}", path_naive);
 
+    let now = Instant::now();
+    let path_repetitive = algorithms::algorithms::repetitive_nearest_neighbour(&cities_distances);
+    println!("Solving RNN solution took {:?}", now.elapsed());
+    println!("RNN solution: {:#?}", path_repetitive);
         let now = Instant::now();
         let path_rnn = repetitive_nearest_neighbour(&cities_distances);
         let rnn_time = now.elapsed().as_nanos();
@@ -166,7 +176,7 @@ fn distance_between_two_cities (city_a: i32, city_b: i32, cities_distances: &[[f
 }
 
 fn naive(cities_distances: &[[f64; AMOUNT as usize]; AMOUNT as usize]) -> Path {
-    //println!("Hello from naive solution");
+    println!("Hello from naive solution");
 
     //list of all cities
     let cities: [i32; AMOUNT as usize] = {
@@ -205,7 +215,7 @@ fn naive(cities_distances: &[[f64; AMOUNT as usize]; AMOUNT as usize]) -> Path {
 
     fn find_solution (cities: &mut Vec<i32>, current_city: i32, mut path: Path, cities_distances: &[[f64; AMOUNT as usize]; AMOUNT as usize], shortest_path: &mut Path) {
         //println!("{:?} \n {:?}", shortest_path, path);
-        //println!("{:?}", cities);
+        println!("{:?}", cities);
         if cities.len() == 1 {
             //println!("{:?} \n {:?}", path.length, path.route);
             //when cities.len() == 1, add last city to the route and calculate new length. ALSO add 0th city (start position) to end of route and calculate new length
@@ -215,7 +225,7 @@ fn naive(cities_distances: &[[f64; AMOUNT as usize]; AMOUNT as usize]) -> Path {
 
             path.length = path.length + distance_between_two_cities(path.route[path.route.len() - 1], 0, cities_distances);
             path.route.push(0);
-            //println!("{:#?}", path);
+            println!("{:#?}", path);
 
             if path.length < shortest_path.length {
                 *shortest_path = path.clone();
@@ -258,7 +268,7 @@ fn naive(cities_distances: &[[f64; AMOUNT as usize]; AMOUNT as usize]) -> Path {
 }
 
 fn repetitive_nearest_neighbour (cities_distances: &[[f64; AMOUNT as usize]; AMOUNT as usize]) -> Path {
-    //println!("Hello from RNN solution");
+    println!("Hello from RNN solution");
 
     let cities: [i32; AMOUNT as usize] = {
         let mut temp = [0; AMOUNT as usize];

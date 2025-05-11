@@ -24,9 +24,7 @@ mod city_gen;
 const AMOUNT: i32 = 5;
 
 fn main() {
-    let now = Instant::now();
-    let cities_distances: [[f64; AMOUNT as usize]; AMOUNT as usize] =
-        city_gen::city_gen::cities_spawn();
+    let cities_distances: [[f64; AMOUNT as usize]; AMOUNT as usize] = city_gen::city_gen::cities_spawn();
     //println!("Spawning {} cities took {:?}", AMOUNT, now.elapsed());
     let cities_distances: [[f64; AMOUNT as usize]; AMOUNT as usize] = {
         [

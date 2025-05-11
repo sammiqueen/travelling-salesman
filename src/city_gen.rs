@@ -1,7 +1,7 @@
 pub mod city_gen {
+    use crate::City;
     use crate::AMOUNT;
     use rand::Rng;
-    use crate::City;
 
     pub fn cities_spawn() -> [[f64; AMOUNT as usize]; AMOUNT as usize] {
         let mut rng = rand::rng();

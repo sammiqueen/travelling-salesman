@@ -25,9 +25,7 @@ const AMOUNT: i32 = 10w;
 const ITERATIONS: i32 = 100;
 
 fn main() {
-    let now = Instant::now();
-    let cities_distances: [[f64; AMOUNT as usize]; AMOUNT as usize] =
-        city_gen::city_gen::cities_spawn();
+    let cities_distances: [[f64; AMOUNT as usize]; AMOUNT as usize] = city_gen::city_gen::cities_spawn();
     //println!("Spawning {} cities took {:?}", AMOUNT, now.elapsed());
     let cities_distances: [[f64; AMOUNT as usize]; AMOUNT as usize] = {
     let _now = Instant::now();

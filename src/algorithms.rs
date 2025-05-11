@@ -1,4 +1,7 @@
 pub mod algorithms {
+    use crate::AMOUNT;
+    use crate::Path;
+
     fn distance_between_two_cities (city_a: i32, city_b: i32, cities_distances: &[[f64; AMOUNT as usize]; AMOUNT as usize]) -> f64 {
         return cities_distances[city_a as usize][city_b as usize];
     }
@@ -43,7 +46,7 @@ pub mod algorithms {
     
         fn find_solution (cities: &mut Vec<i32>, current_city: i32, mut path: Path, cities_distances: &[[f64; AMOUNT as usize]; AMOUNT as usize], shortest_path: &mut Path) {
             //println!("{:?} \n {:?}", shortest_path, path);
-            println!("{:?}", cities);
+            //println!("{:?}", cities);
             if cities.len() == 1 {
                 //println!("{:?} \n {:?}", path.length, path.route);
                 //when cities.len() == 1, add last city to the route and calculate new length. ALSO add 0th city (start position) to end of route and calculate new length
@@ -53,7 +56,7 @@ pub mod algorithms {
     
                 path.length = path.length + distance_between_two_cities(path.route[path.route.len() - 1], 0, cities_distances);
                 path.route.push(0);
-                println!("{:#?}", path);
+                //println!("{:#?}", path);
     
                 if path.length < shortest_path.length {
                     *shortest_path = path.clone();

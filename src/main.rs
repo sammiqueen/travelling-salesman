@@ -1,29 +1,21 @@
-use rand::Rng;
-
 use std::time::Instant;
 
-#[derive(Debug)]
-#[derive(Copy)]
-#[derive(Clone)]
-#[derive(PartialEq)]
-struct City {
+#[derive(Debug, Copy, Clone, PartialEq)]
+pub struct City {
     position_x: i32,
     position_y: i32,
 }
 
-#[derive(Debug)]
-#[derive(Clone)]
-#[derive(PartialEq)]
-struct TreeSpecifics {
+#[derive(Debug, Clone, PartialEq)]
+pub struct TreeSpecifics {
     possible_destinations: [Vec<i32>; AMOUNT as usize],
     current_level: usize,
 }
 
-#[derive(Debug)]
-#[derive(Clone)]
-struct Path {
+#[derive(Debug, Clone)]
+pub struct Path {
     length: f64,
-    route: Vec<i32>
+    route: Vec<i32>,
 }
 
 mod algorithms;
@@ -33,7 +25,8 @@ const AMOUNT: i32 = 5;
 
 fn main() {
     let now = Instant::now();
-    let cities_distances: [[f64; AMOUNT as usize]; AMOUNT as usize] = city_gen::city_gen::cities_spawn();
+    let cities_distances: [[f64; AMOUNT as usize]; AMOUNT as usize] =
+        city_gen::city_gen::cities_spawn();
     //println!("Spawning {} cities took {:?}", AMOUNT, now.elapsed());
     let cities_distances: [[f64; AMOUNT as usize]; AMOUNT as usize] = {
         [
@@ -44,13 +37,7 @@ fn main() {
                 3.605551275463989,
                 4.47213595499958,
             ],
-            [
-                5.385164807134504,
-                0.0,
-                3.7416573867739413,
-                4.0,
-                3.0,
-            ],
+            [5.385164807134504, 0.0, 3.7416573867739413, 4.0, 3.0],
             [
                 4.58257569495584,
                 3.7416573867739413,
@@ -71,7 +58,7 @@ fn main() {
                 3.605551275463989,
                 3.3166247903554,
                 0.0,
-            ]
+            ],
         ]
     };
     println!("Distances included:  \n{:#?}", cities_distances);

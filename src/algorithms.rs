@@ -61,7 +61,6 @@ pub mod algorithms {
             shortest_path: &mut Path,
         ) {
             if cities.len() == 0 {
-
                 //append 0 to the end of route
                 path.length = path.length + {
                     distance_between_two_cities(
@@ -99,7 +98,7 @@ pub mod algorithms {
                         + distance_between_two_cities(current_city, city, cities_distances),
                     route: current_route,
                 };
-                
+
                 cities[i] = cities[cities.len() - 1];
                 cities.pop();
 
@@ -107,13 +106,11 @@ pub mod algorithms {
 
                 if i >= cities.len() {
                     cities.push(city);
-                }
-                else {
+                } else {
                     cities.push(cities[i]);
                     cities[i] = city;
                 }
             }
-
         }
 
         shortest_path

@@ -31,7 +31,8 @@ fn main() {
     let mut tot_difference: f64 = 0.0;
 
     for _i in 0..ITERATIONS {
-        let cities_distances: [[f64; AMOUNT as usize]; AMOUNT as usize] = city_gen::city_gen::cities_spawn();
+        let cities_distances: [[f64; AMOUNT as usize]; AMOUNT as usize] =
+            city_gen::city_gen::cities_spawn();
         //println!("Spawning {} cities took {:?}", AMOUNT, now.elapsed());
         //println!("Distances included:  \n{:#?}", cities_distances);
 

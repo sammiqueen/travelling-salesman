@@ -60,6 +60,10 @@ pub mod algorithms {
             cities_distances: &[[f64; AMOUNT as usize]; AMOUNT as usize],
             shortest_path: &mut Path,
         ) {
+            if path.length > shortest_path.length {
+                return
+            }
+            
             if cities.len() == 0 {
                 //append 0 to the end of route
                 path.length = path.length + {

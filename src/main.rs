@@ -19,7 +19,7 @@ struct Path {
 mod algorithms;
 mod city_gen;
 
-const AMOUNT: i32 = 9;
+const AMOUNT: i32 = 8;
 const ITERATIONS: i32 = 1000;
 
 fn main() {

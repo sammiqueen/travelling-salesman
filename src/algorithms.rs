@@ -78,6 +78,7 @@ pub mod algorithms {
                 if path.length < shortest_path.length {
                     *shortest_path = path.clone();
                 }
+                //println!("Route found: {:?}", path.route);
 
                 //remove 0 from the end of the route
                 path.route.pop();
@@ -91,6 +92,8 @@ pub mod algorithms {
 
                 return;
             }
+
+            //println!("{:?}", cities);
 
             for i in 0..cities.len() {
                 let city = cities[i];

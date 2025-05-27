@@ -1,4 +1,4 @@
-# Travelling salesman problem.
+# Travelling salesperson problem.
 
 ### How to use.
 This program requires a local installation of Rust to function.
